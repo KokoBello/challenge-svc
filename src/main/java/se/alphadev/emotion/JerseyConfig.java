@@ -9,7 +9,6 @@ import se.alphadev.emotion.rest.ChallengeResource;
 public class JerseyConfig extends ResourceConfig {
 
 	public JerseyConfig() {
-		System.out.println("Koko");
 		register( ChallengeResource.class);
 	}
 	
