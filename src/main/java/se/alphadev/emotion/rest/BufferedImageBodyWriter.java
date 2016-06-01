@@ -28,8 +28,8 @@ public class BufferedImageBodyWriter implements MessageBodyWriter<BufferedImage>
 	}
 
 	@Override
-	public void writeTo(BufferedImage image, Class<?> type, Type type1, Annotation[] antns, MediaType mt,
-			MultivaluedMap<String, Object> mm, OutputStream out) throws IOException, WebApplicationException {
+	public void writeTo(
+			BufferedImage image, Class<?> type, Type type1, Annotation[] antns, MediaType mt, MultivaluedMap<String, Object> mm, OutputStream out) throws IOException, WebApplicationException {
 		ImageIO.write(image, mt.getSubtype(), out);
 	}
 }
