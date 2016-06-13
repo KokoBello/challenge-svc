@@ -1,14 +1,19 @@
 package se.alphadev.emotion;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import javax.imageio.ImageIO;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
@@ -18,6 +23,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.client.RestTemplate;
 
 //import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,30 +32,33 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 //@WebAppConfiguration
 @WebIntegrationTest
 public class ChallengeApplicationTests {
+	
+	Logger log = LoggerFactory.getLogger( ChallengeApplication.class );
 
 //	@Value("${local.server.port}")
 	private int port = 8080;
+	private String baseUrl = "http://localhost:"+ port;
 
 	@Test
 	public void contextLoads() {		
-		String reply = new TestRestTemplate()
-				.getForObject("http://localhost:" + this.port + "/challenge", String.class);
+		String reply = new RestTemplate()
+				.getForEntity(baseUrl + "/challenge", String.class).getBody();
 		Assertions.assertThat ( reply ).isEqualTo( "Challenge resource up and running!" );
 	}
 	
 	@Test
+	public void getImage_getForEntity_bufferedImage() throws Exception {
+		log.debug("KOKO");
+		ResponseEntity<BufferedImage> response = new RestTemplate()
+				.getForEntity(baseUrl + "/challenge/get-image1", BufferedImage.class);
+
+		ImageIO.write( response.getBody(), "jpg", Paths.get("koko1.png").toFile());
+	}
+	
+	@Test
 	public void getImage() throws IOException, URISyntaxException {
-		
-//		BufferedImage reply = restTemplate
-//				.getForObject("http://localhost:" + this.port + "/challenge/get-image", BufferedImage.class);
-//		ResponseEntity<BufferedImage> reply = restTemplate
-//				.getForEntity("http://localhost:" + this.port + "/challenge/get-image", BufferedImage.class);
-		
-//		System.out.println( Lists.newArrayList( ImageIO.getReaderMIMETypes() ) );
+		RestTemplate restTemplate = new RestTemplate();
 
-		TestRestTemplate restTemplate = new TestRestTemplate();
-
-		
 //		restTemplate.getMessageConverters().add(new BufferedImageHttpMessageConverter());
 
 //		RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:" + this.port + "/challenge/get-image2"))
@@ -64,8 +73,8 @@ public class ChallengeApplicationTests {
 	    headers.setAccept(Arrays.asList(MediaType.IMAGE_JPEG));
 	    HttpEntity<String> entity = new HttpEntity<String>(headers);
 
-	    ResponseEntity<byte[]> response = restTemplate.exchange(
-	            "http://localhost:" + this.port + "/challenge/get-image2",
+		ResponseEntity<byte[]> response = restTemplate.exchange(
+	            baseUrl+"/challenge/get-image2",
 	            HttpMethod.GET, entity, byte[].class);
 		
 	    Files.write( Paths.get("koko1.png"), response.getBody() );
