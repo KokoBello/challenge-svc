@@ -45,7 +45,7 @@ public class ChallengeResource {
 	}
 	
 	
-	
+	//https://www.kerstner.at/en/2013/08/serving-files-using-jersey-web-service-jax-rs/
 	@GET
 	@Path("/get-image1")
 //	@Produces({"image/png","image/gif","image/jpg"}
