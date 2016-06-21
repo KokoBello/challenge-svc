@@ -1,7 +1,5 @@
 package se.alphadev.emotion.api;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({ "left", "top", "width", "height" })
 public class FaceRectangle {
 
